@@ -7,7 +7,7 @@ import { Global } from './Global';
 import './App.css';
 
 const useStyles = makeStyles({
-  container: { height: '80vh' },
+  container: { minHeight: '80vh' },
 });
 function App() {
   const classes = useStyles();
@@ -17,14 +17,12 @@ function App() {
     <Global
       Root={() => {
         return (
-          <div className='App'>
-            <>
-              <CssBaseline />
-              <Container maxWidth='sm' className={classes.container}>
-                <Form />
-              </Container>
-            </>
-          </div>
+          <>
+            <CssBaseline />
+            <Container maxWidth='sm' className={classes.container}>
+              <Form />
+            </Container>
+          </>
         );
       }}
     />

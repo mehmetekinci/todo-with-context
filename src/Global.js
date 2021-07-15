@@ -10,6 +10,9 @@ const initialGlobalState = {
 
 export const GlobalState = React.createContext();
 
+// Expose the GlobalState object to the window (allowing GlobalState.set({ count: 'new' }) from anywhere in the code (even your console))
+window.GlobalState = GlobalState;
+
 export class Global extends React.Component {
   constructor(props) {
     super(props);
@@ -49,6 +52,3 @@ export class Global extends React.Component {
     );
   }
 }
-
-// Expose the GlobalState object to the window (allowing GlobalState.set({ count: 'new' }) from anywhere in the code (even your console))
-window.GlobalState = GlobalState;
