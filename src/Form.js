@@ -67,6 +67,12 @@ export function Form() {
     setText('');
   }
 
+  function deleteTodo(index) {
+    window.GlobalState.set({
+      todos: todos.filter((_, i) => i !== index),
+    });
+  }
+
   return (
     <>
       <Card className={classes.title}>
@@ -114,7 +120,11 @@ export function Form() {
                 />
                 <ListItemText primary={todo.text} secondary={todo.date} />
                 <Container className={classes.buttonsContainer}>
-                  <IconButton size='small' color='secondary'>
+                  <IconButton
+                    onClick={() => deleteTodo(i)}
+                    size='small'
+                    color='secondary'
+                  >
                     <HighlightOff />
                   </IconButton>
                   <IconButton size='small' color='primary'>
