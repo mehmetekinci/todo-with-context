@@ -11,8 +11,9 @@ import {
   ListItemText,
   Checkbox,
   IconButton,
+  ButtonGroup,
 } from '@material-ui/core';
-import { Queue, HighlightOff, Edit } from '@material-ui/icons';
+import { Queue, HighlightOff, Edit, Save, Delete } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useGlobalState } from './useGlobalState';
 import { formatDate } from './formatDate';
@@ -49,6 +50,7 @@ const useStyles = makeStyles({
 // Create an example component which both renders and modifies the GlobalState
 export function Form() {
   const [text, setText] = useState('');
+  const [editingIndex, setEditingIndex] = useState(null);
 
   const { todos } = useGlobalState();
 
@@ -56,13 +58,12 @@ export function Form() {
 
   function handleChange(e) {
     setText(e.target.value);
-    console.log(e.target.value);
   }
 
   function addTodo() {
     const newTodo = { text, date: formatDate() };
     window.GlobalState.set({
-      todos: [...todos, newTodo],
+      todos: [newTodo, ...todos],
     });
     setText('');
   }
@@ -71,6 +72,25 @@ export function Form() {
     window.GlobalState.set({
       todos: todos.filter((_, i) => i !== index),
     });
+  }
+
+  function onEditMode(index) {
+    setEditingIndex(index);
+    setText(todos[index].text);
+  }
+
+  function saveChanges() {
+    window.GlobalState.set({
+      todos: todos.map((todo, i) => {
+        return editingIndex === i ? { ...todo, text } : todo;
+      }),
+    });
+    cancelEditMode();
+  }
+
+  function cancelEditMode() {
+    setText('');
+    setEditingIndex(null);
   }
 
   return (
@@ -97,16 +117,39 @@ export function Form() {
             />
           </form>
         </CardContent>
-        <Button
-          onClick={addTodo}
-          className={classes.addButton}
-          variant='contained'
-          color='primary'
-          disableElevation
-        >
-          <Queue />
-          Add Todo
-        </Button>
+        {editingIndex !== null ? (
+          <ButtonGroup fullWidth>
+            <Button
+              onClick={saveChanges}
+              className={classes.addButton}
+              variant='contained'
+              color='primary'
+              disableElevation
+            >
+              <Save />
+              Save Changes
+            </Button>
+            <Button
+              onClick={cancelEditMode}
+              variant='contained'
+              color='secondary'
+              disableElevation
+            >
+              <HighlightOff />
+              Cancel
+            </Button>
+          </ButtonGroup>
+        ) : (
+          <Button
+            onClick={addTodo}
+            variant='contained'
+            color='primary'
+            disableElevation
+          >
+            <Queue />
+            Add Todo
+          </Button>
+        )}
       </Card>
       {todos && todos.length > 0 && (
         <List className={classes.list}>
@@ -125,9 +168,13 @@ export function Form() {
                     size='small'
                     color='secondary'
                   >
-                    <HighlightOff />
+                    <Delete />
                   </IconButton>
-                  <IconButton size='small' color='primary'>
+                  <IconButton
+                    onClick={() => onEditMode(i)}
+                    size='small'
+                    color='primary'
+                  >
                     <Edit />
                   </IconButton>
                 </Container>
