@@ -2,9 +2,9 @@ import React from 'react';
 
 const initialGlobalState = {
   todos: [
-    { text: 'text', date: '15.07.2021' },
-    { text: 'text', date: '15.07.2021' },
-    { text: 'text', date: '15.07.2021' },
+    { text: 'text', date: '15.07.2021', isComplated: false },
+    { text: 'text', date: '15.07.2021', isComplated: false },
+    { text: 'text', date: '15.07.2021', isComplated: false },
   ],
 };
 

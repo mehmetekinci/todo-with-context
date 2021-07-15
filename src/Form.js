@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -15,6 +15,7 @@ import {
 import { Queue, HighlightOff, Edit } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useGlobalState } from './useGlobalState';
+import { formatDate } from './formatDate';
 
 const useStyles = makeStyles({
   title: {
@@ -47,12 +48,23 @@ const useStyles = makeStyles({
 
 // Create an example component which both renders and modifies the GlobalState
 export function Form() {
+  const [text, setText] = useState('');
+
   const { todos } = useGlobalState();
+
   const classes = useStyles();
 
   function handleChange(e) {
+    setText(e.target.value);
     console.log(e.target.value);
-    console.log(todos);
+  }
+
+  function addTodo() {
+    const newTodo = { text, date: formatDate() };
+    window.GlobalState.set({
+      todos: [...todos, newTodo],
+    });
+    setText('');
   }
 
   return (
@@ -72,6 +84,7 @@ export function Form() {
           </Typography>
           <form className={classes.form} noValidate autoComplete='off'>
             <TextField
+              value={text}
               onChange={handleChange}
               id='standard-basic'
               label='Add Todo'
@@ -79,6 +92,7 @@ export function Form() {
           </form>
         </CardContent>
         <Button
+          onClick={addTodo}
           className={classes.addButton}
           variant='contained'
           color='primary'
@@ -98,7 +112,7 @@ export function Form() {
                   color='primary'
                   inputProps={{ 'aria-label': 'secondary checkbox' }}
                 />
-                <ListItemText primary={todo.text} secondary='Jan 9, 2014' />
+                <ListItemText primary={todo.text} secondary={todo.date} />
                 <Container className={classes.buttonsContainer}>
                   <IconButton size='small' color='secondary'>
                     <HighlightOff />
