@@ -61,7 +61,7 @@ export function Form() {
   }
 
   function addTodo() {
-    const newTodo = { text, date: formatDate() };
+    const newTodo = { text, date: formatDate(), isCompleted: false };
     window.GlobalState.set({
       todos: [newTodo, ...todos],
     });
@@ -91,6 +91,14 @@ export function Form() {
   function cancelEditMode() {
     setText('');
     setEditingIndex(null);
+  }
+
+  function toggleComplete(index) {
+    window.GlobalState.set({
+      todos: todos.map((todo, i) => {
+        return index === i ? { ...todo, isCompleted: !todo.isCompleted } : todo;
+      }),
+    });
   }
 
   return (
@@ -155,9 +163,14 @@ export function Form() {
         <List className={classes.list}>
           {todos.map((todo, i) => {
             return (
-              <ListItem key={i} className={classes.listItem}>
+              <ListItem
+                disabled={todo.isCompleted}
+                key={i}
+                className={classes.listItem}
+              >
                 <Checkbox
-                  defaultChecked
+                  onChange={() => toggleComplete(i)}
+                  checked={todo.isCompleted}
                   color='primary'
                   inputProps={{ 'aria-label': 'secondary checkbox' }}
                 />
