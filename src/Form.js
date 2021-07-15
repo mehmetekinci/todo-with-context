@@ -116,18 +116,18 @@ export function Form() {
           >
             Let's write something to remember!!!
           </Typography>
-          <form className={classes.form} noValidate autoComplete='off'>
-            <TextField
-              value={text}
-              onChange={handleChange}
-              id='standard-basic'
-              label='Add Todo'
-            />
-          </form>
+          <TextField
+            fullWidth
+            value={text}
+            onChange={handleChange}
+            id='standard-basic'
+            label='Add Todo'
+          />
         </CardContent>
         {editingIndex !== null ? (
           <ButtonGroup fullWidth>
             <Button
+              disabled={!(text && text.length > 3)}
               onClick={saveChanges}
               className={classes.addButton}
               variant='contained'
@@ -149,6 +149,7 @@ export function Form() {
           </ButtonGroup>
         ) : (
           <Button
+            disabled={!(text && text.length > 3)}
             onClick={addTodo}
             variant='contained'
             color='primary'
