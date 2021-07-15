@@ -3,5 +3,5 @@ export function formatDate(date = new Date()) {
   const month = new Intl.DateTimeFormat('en', { month: 'short' }).format(date);
   const day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);
 
-  return `${day}-${month}-${year}`;
+  return `${day}.${month}.${year}`;
 }
